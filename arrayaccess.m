@@ -2,7 +2,7 @@ function [entry, idx] = arrayaccess(array,index)
 %ARRAYACCESS
 
     if isvector(array)
-      array = colvec(array);
+      array = vec(array);
     end % if isvector(array)
     
     arraySize = size(array);
