@@ -6,6 +6,7 @@ function varargout=figurememorymanagement(varargin)
 % Modified by Akinyinka Omigbodun 06/30/2013
 %   -Renamed from FIGURE to FIGUREMEMORYMANAGEMENT to avoid naming conflict
 %   -Changed "garbace" to "garbage" on line 19
+% Modified by Akinyinka Omigbodun 05/01/2015
 %   -Ensure that varargout{1} is assigned
 
     varargout{1} = [];
