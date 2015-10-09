@@ -1,5 +1,5 @@
 function varargout=figurememorymanagement(varargin)
-%FIGURE2 prevents Matlab from crashing when opening many figures
+%FIGUREMEMORYMANAGEMENT prevents Matlab from crashing when opening many figures
 % (http://stackoverflow.com/questions/6201272/how-to-avoid-matlab-
 %  crash-when-opening-too-many-figures)
 %
