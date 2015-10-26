@@ -14,6 +14,12 @@ linksTest               = cell(nPatients,1);
 seqInfoTrain            = cell(nPatients,1);
 seqInfoTest             = cell(nPatients,1);
 
+% numStates USAGE
+pa                      = 1;
+m                       = 1;
+nStates                 = numstates(seqTest{pa}{m});
+disp(nStates)
+
 
 minDistTol              = 7;
 for pa=pa_select
