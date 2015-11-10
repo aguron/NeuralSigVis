@@ -1,4 +1,4 @@
-function figures = viewclusters(grouping, varargin)
+function figures = viewclusters2(grouping, varargin)
 %VIEWCLUSTERS
 
 
@@ -31,14 +31,12 @@ global axes2
   N                         = length(unique([nodesClique nodesDirGraph nodesSingleton]));
 
   % plot nodes
+  axes1;
   theta                     = linspace(0,2*pi,N+1);
   theta                     = theta(1:end-1);
   [x,y]                     = pol2cart(theta,1); % rho = 1;
 %   figures                   = [];
-%   figures                   = [figures, show];
-
-  axes1
-  
+%   figures                   = [figures, show]
   plot(x,y,'.k','MarkerSize',10);
   axis([-1 1 -1 1]);
   axis equal off
@@ -194,6 +192,7 @@ global axes2
 
   % plot directed subgraphs
   %
+  axes2;
   % number of directed graphs
   nDirGraphs                = cellfun(@length,grouping{2});
 
@@ -207,8 +206,7 @@ global axes2
   % plot nodes
   
   
-%   figures                   = [figures, show];
-  axes2
+%   figures                   = [figures, show]
   plot(x,y,'.k','MarkerSize',10);
   axis([-1 1 -1 1]);
   axis equal off

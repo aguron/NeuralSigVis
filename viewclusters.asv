@@ -1,10 +1,9 @@
 function figures = viewclusters(grouping, varargin)
 %VIEWCLUSTERS
 
-
-% added global call to gui handles for plot destinations
-global axes1
-global axes2 
+%added global call to gui handles for plot destinations
+global handles.axes1
+global handles.axes2 
 
   PoincareHypDisks          = true; % default: true
   minEdgeCrossings          = true; % default: true
@@ -34,11 +33,8 @@ global axes2
   theta                     = linspace(0,2*pi,N+1);
   theta                     = theta(1:end-1);
   [x,y]                     = pol2cart(theta,1); % rho = 1;
-%   figures                   = [];
-%   figures                   = [figures, show];
-
-  axes1
-  
+  figures                   = [];
+  figures                   = [figures, show];
   plot(x,y,'.k','MarkerSize',10);
   axis([-1 1 -1 1]);
   axis equal off
@@ -205,10 +201,7 @@ global axes2
   end % for i=1:length(nShades)
   
   % plot nodes
-  
-  
-%   figures                   = [figures, show];
-  axes2
+  figures                   = [figures, show];
   plot(x,y,'.k','MarkerSize',10);
   axis([-1 1 -1 1]);
   axis equal off
