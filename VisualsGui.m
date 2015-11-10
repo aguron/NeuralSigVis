@@ -43,6 +43,25 @@ else
 end
 
 
+%autosetup for sliders
+global Initial_Setup
+if isempty(Initial_Setup)
+    HandleStruct=SliderSetup('s_ref',handles.s_ref,'s_nseq',handles.s_nseq,'s_trans',handles.s_trans,'s_maxProb',handles.s_maxProb,'s_ins',handles.s_ins,'s_seg',handles.s_seg,'s_min',handles.s_min,...
+                'min_ref',handles.min_ref,'min_nseq',handles.min_nseq,'min_trans',handles.min_trans,'min_maxProb',handles.min_maxProb,'min_ins',handles.min_ins,'min_seg',handles.min_seg,'min_min',handles.min_min,...
+                'max_ref',handles.s_ref,'max_nseq',handles.max_nseq,'max_trans',handles.max_trans,'max_maxProb',handles.max_maxProb,'max_ins',handles.max_ins,'max_seg',handles.max_seg,'max_min',handles.max_min,...
+                'title_ref',handles.title_ref,'title_nseq',handles.title_nseq,'title_trans',handles.title_trans,'title_maxProb',handles.title_maxProb,'title_ins',handles.title_ins,'title_seg',handles.title_seg,'title_min',handles.title_min,...
+                'disp_ref',handles.s_ref,'disp_nseq',handles.disp_nseq,'disp_trans',handles.disp_trans,'disp_maxProb',handles.disp_maxProb,'disp_ins',handles.disp_ins,'disp_seg',handles.s_seg,'disp_min',handles.disp_min);
+
+
+[handles.s_ref,handles.s_nseq,handles.s_trans,handles.s_maxProb,handles.s_ins,handles.s_seg,handles.s_min]= HandleStruct{1,1:7};
+
+
+elseif Initial_Setup
+    return
+end
+
+
+
 % End initialization code - DO NOT EDIT
 
 
