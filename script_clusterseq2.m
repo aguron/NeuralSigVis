@@ -1,13 +1,13 @@
-function script_clusterseq2(nSeqMax,refState,transientLenThr, maxProbTol,insPenalty,segPenalty, minDistTol,axesHandle)
+function script_clusterseq2(nSeqMax,refState,transientLenThr, maxProbTol,insPenalty,segPenalty, minDistTol,axesHandle,FileName)
        
-
+FileName=FileName;
 %%
-load data_clusterseq
+if FileName ~=0
+uiopen(FileName,1);
+elseif FileName==0
+    disp('Error Loading File')
+end
 
-%%
-% disp('**********');
-% disp('... Clustering factor analyzer state sequences ...');
-%
 locTrain                = cell(nPatients,1);
 locTest                 = cell(nPatients,1);
 groupingTrain           = cell(nPatients,1);

@@ -22,7 +22,7 @@ function varargout = VisualsGui(varargin)
 
 % Edit the above text to modify the response to help VisualsGui
 
-% Last Modified by GUIDE v2.5 14-Nov-2015 18:04:14
+% Last Modified by GUIDE v2.5 14-Nov-2015 22:02:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -122,92 +122,34 @@ end
 
 
 % --- Executes on button press in s_default.
+
 function s_default_Callback(hObject, eventdata, handles)
 % hObject    handle to s_default (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%% Load data
-load data_clusterseq
-
-
-
-handles.dataInfo=dataInfo;
-handles.graphInfo=graphInfo;
-handles.nGroups=nGroups;
-handles.nPatients=nPatients;
-handles.pa_select=pa_select;
-handles.seqTest=seqTest;
-handles.sqTrain=sqTrain;
-guidata(hObject,handles)
-
-
-
-handles.locTrain                = cell(nPatients,1);
-handles.locTest                 = cell(nPatients,1);
-handles.groupingTrain           = cell(nPatients,1);
-handles.groupingTest            = cell(nPatients,1);
-handles.linksTrain              = cell(nPatients,1);
-handles.linksTest               = cell(nPatients,1);
-handles.seqInfoTrain            = cell(nPatients,1);
-handles.seqInfoTest             = cell(nPatients,1);
-guidata(hObject,handles)
-
-handles.pa                      = 1;
-handles.m                       = 1;
-handles.nStates                 = numstates(handles.seqTest{handles.pa}{handles.m});
-handles.pa_select=pa_select;
-handles.nGroups=nGroups;
-guidata(hObject,handles)
 
 %% refState Slider Setup
-
 set(handles.disp_ref, 'String', num2str(1))
 set(handles.s_ref, 'Value', 1)
 handles.refState=1;
 guidata(hObject,handles)
 
-%Will have to get numstates into the third input of the SettingsGen
-%function for refState max
-handles.setup_ref = SettingsGen(1,0,handles.nStates,1/handles.nStates,1/handles.nStates,10,60,40,2,.1);
+
+FileName=handles.FileName;
+if FileName==0
+disp('Error Loading File')
+disp('Please click the "Select File" Button')
+
+%set nStates to 4 if no file has been loaded 
+handles.nStates=4;
+guidata(hObject,handles)
+end
+set(handles.max_ref, 'String', num2str(handles.nStates))    
+set(handles.s_ref, 'Max' , handles.nStates)
+set(handles.s_ref, 'SliderStep' , [1/handles.nStates, 1/handles.nStates])
 guidata(hObject,handles)
 
-
-% refState Slider Setup
-
-% set(handles.s_ref, 'Visible' , 'Off')
-% set(handles.s_ref, 'Value' , handles.setup_ref{1})
-% set(handles.s_ref, 'Min' , handles.setup_ref{2})
-set(handles.s_ref, 'Max' , handles.setup_ref{3})
-set(handles.s_ref, 'SliderStep' , [handles.setup_ref{4}, handles.setup_ref{5}])
-% set(handles.s_ref, 'Position' , handles.setup_ref{6})
-% set(handles.s_ref, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% min value display setup 
-% set(handles.min_ref, 'String', num2str(handles.setup_ref{2}))
-% set(handles.min_ref,'Position', handles.setup_ref{7})
-% set(handles.min_ref, 'Visible' , 'On')
-% guidata(hObject,handles)
-
-% max value display setup 
-set(handles.max_ref, 'String', num2str(handles.nStates))
-% set(handles.max_ref,'Position', handles.setup_ref{8})
-% set(handles.max_ref, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% slider varialbe title display setup 
-% set(handles.title_ref, 'String', 'refState (default:1)') 
-% set(handles.title_ref,'Position', handles.setup_ref{9})
-% set(handles.title_ref, 'Visible' , 'On')
-% guidata(hObject,handles)
-
-% %slider current value display
-% set(handles.disp_ref, 'String', num2str(handles.refState))
-% set(handles.disp_ref, 'Position', handles.setup_ref{10})
-% set(handles.disp_ref, 'Visible' , 'On')
-% guidata(hObject,handles)
-
-%end of slider setup for refState
+%end of slider default setup for refState
 
 %% nSeqMax Slider Setup
 
@@ -625,9 +567,9 @@ guidata(hObject,handles)
 
 
 axes_VisualsGui=handles.axes_VisualsGui;
+FileName=handles.FileName;
 
-
-script_clusterseq2(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,axes_VisualsGui);
+script_clusterseq2(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,axes_VisualsGui,FileName);
 guidata(hObject,handles)
 
 
@@ -705,4 +647,53 @@ function s_min_CreateFcn(hObject, eventdata, handles)
 % Hint: slider controls usually have a light gray background.
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on button press in Select_File.
+function Select_File_Callback(hObject, eventdata, handles)
+% hObject    handle to Select_File (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[FileName,PathName] = uigetfile('*.mat','Select the desired MATLAB .mat file');
+
+if FileName ~=0
+uiopen(FileName,1);
+handles.FileName=FileName;
+
+handles.dataInfo=dataInfo;
+handles.graphInfo=graphInfo;
+handles.nGroups=nGroups;
+handles.nPatients=nPatients;
+handles.pa_select=pa_select;
+handles.seqTest=seqTest;
+handles.sqTrain=sqTrain;
+guidata(hObject,handles)
+
+handles.locTrain                = cell(nPatients,1);
+handles.locTest                 = cell(nPatients,1);
+handles.groupingTrain           = cell(nPatients,1);
+handles.groupingTest            = cell(nPatients,1);
+handles.linksTrain              = cell(nPatients,1);
+handles.linksTest               = cell(nPatients,1);
+handles.seqInfoTrain            = cell(nPatients,1);
+handles.seqInfoTest             = cell(nPatients,1);
+guidata(hObject,handles)
+
+handles.pa                      = 1;
+handles.m                       = 1;
+handles.nStates                 = numstates(handles.seqTest{handles.pa}{handles.m});
+handles.pa_select=pa_select;
+handles.nGroups=nGroups;
+guidata(hObject,handles)
+
+%Setup nStates as max value for refState Slider
+set(handles.s_ref, 'Max' , handles.nStates)
+set(handles.s_ref, 'SliderStep' , [1/handles.nStates, 1/handles.nStates])
+set(handles.max_ref, 'String', num2str(handles.nStates))
+guidata(hObject,handles)
+
+
+elseif FileName==0
+    disp('Error Loading File')
 end
