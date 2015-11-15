@@ -5,8 +5,8 @@ function script_clusterseq2(nSeqMax,refState,transientLenThr, maxProbTol,insPena
 load data_clusterseq
 
 %%
-disp('**********');
-disp('... Clustering factor analyzer state sequences ...');
+% disp('**********');
+% disp('... Clustering factor analyzer state sequences ...');
 %
 locTrain                = cell(nPatients,1);
 locTest                 = cell(nPatients,1);
@@ -21,7 +21,7 @@ seqInfoTest             = cell(nPatients,1);
 pa                      = 1;
 m                       = 1;
 nStates                 = numstates(seqTest{pa}{m});
-disp(nStates)
+% disp(nStates)
 %%
 
 
@@ -46,16 +46,16 @@ for pa=pa_select
   end % for m=1:nGroups
 end % for pa=pa_select
 %
-disp('Complete');
-disp('**********');
+% disp('Complete');
+% disp('**********');
 %%
-disp('**********');
-disp('... View clustered factor analyzer state sequences ...');
+% disp('**********');
+% disp('... View clustered factor analyzer state sequences ...');
 %
 pa                          = 1;
 viewclusters2(axesHandle,groupingTrain{pa},'minEdgeCrossings',true,'txt',cellstr(num2str(dataInfo{pa})));
 % viewclusters(groupingTrain{pa},'minEdgeCrossings',true,'txt',[]);
 %
-disp('Complete');
-disp('**********');
+% disp('Complete');
+% % disp('**********');
 end
