@@ -1,16 +1,14 @@
-function figures = viewclusters2(grouping, varargin)
+function figures = viewclusters2(axesHandle,grouping, varargin)
 %VIEWCLUSTERS
-
-
-% added global call to gui handles for plot destinations
-global axes1
-global axes2 
 
   PoincareHypDisks          = true; % default: true
   minEdgeCrossings          = true; % default: true
   txt                       = [];
   assignopts(who, varargin);
 
+  
+axesHandle;
+  subplot(2,1,1)
   % plot cliques
   %
   % number of cliques
@@ -31,12 +29,13 @@ global axes2
   N                         = length(unique([nodesClique nodesDirGraph nodesSingleton]));
 
   % plot nodes
-  axes1;
+  
   theta                     = linspace(0,2*pi,N+1);
   theta                     = theta(1:end-1);
   [x,y]                     = pol2cart(theta,1); % rho = 1;
 %   figures                   = [];
 %   figures                   = [figures, show]
+
   plot(x,y,'.k','MarkerSize',10);
   axis([-1 1 -1 1]);
   axis equal off
@@ -191,8 +190,8 @@ global axes2
   hold off
 
   % plot directed subgraphs
-  %
-  axes2;
+  
+  subplot(2,1,2)
   % number of directed graphs
   nDirGraphs                = cellfun(@length,grouping{2});
 

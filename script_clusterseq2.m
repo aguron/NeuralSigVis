@@ -1,5 +1,6 @@
-function script_clusterseq2(nSeqMax,refState,transientLenThr, maxProbTol,insPenalty,segPenalty, minDistTol)
-                             
+function script_clusterseq2(nSeqMax,refState,transientLenThr, maxProbTol,insPenalty,segPenalty, minDistTol,axesHandle)
+       
+
 %%
 load data_clusterseq
 
@@ -52,7 +53,7 @@ disp('**********');
 disp('... View clustered factor analyzer state sequences ...');
 %
 pa                          = 1;
-viewclusters2(groupingTrain{pa},'minEdgeCrossings',true,'txt',cellstr(num2str(dataInfo{pa})));
+viewclusters2(axesHandle,groupingTrain{pa},'minEdgeCrossings',true,'txt',cellstr(num2str(dataInfo{pa})));
 % viewclusters(groupingTrain{pa},'minEdgeCrossings',true,'txt',[]);
 %
 disp('Complete');

@@ -22,7 +22,7 @@ function varargout = VisualsGui(varargin)
 
 % Edit the above text to modify the response to help VisualsGui
 
-% Last Modified by GUIDE v2.5 10-Nov-2015 10:57:48
+% Last Modified by GUIDE v2.5 14-Nov-2015 18:04:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -43,24 +43,6 @@ else
 end
 
 
-%autosetup for sliders
-global Initial_Setup
-if isempty(Initial_Setup)
-    HandleStruct=SliderSetup('s_ref',handles.s_ref,'s_nseq',handles.s_nseq,'s_trans',handles.s_trans,'s_maxProb',handles.s_maxProb,'s_ins',handles.s_ins,'s_seg',handles.s_seg,'s_min',handles.s_min,...
-                'min_ref',handles.min_ref,'min_nseq',handles.min_nseq,'min_trans',handles.min_trans,'min_maxProb',handles.min_maxProb,'min_ins',handles.min_ins,'min_seg',handles.min_seg,'min_min',handles.min_min,...
-                'max_ref',handles.s_ref,'max_nseq',handles.max_nseq,'max_trans',handles.max_trans,'max_maxProb',handles.max_maxProb,'max_ins',handles.max_ins,'max_seg',handles.max_seg,'max_min',handles.max_min,...
-                'title_ref',handles.title_ref,'title_nseq',handles.title_nseq,'title_trans',handles.title_trans,'title_maxProb',handles.title_maxProb,'title_ins',handles.title_ins,'title_seg',handles.title_seg,'title_min',handles.title_min,...
-                'disp_ref',handles.s_ref,'disp_nseq',handles.disp_nseq,'disp_trans',handles.disp_trans,'disp_maxProb',handles.disp_maxProb,'disp_ins',handles.disp_ins,'disp_seg',handles.s_seg,'disp_min',handles.disp_min);
-
-
-[handles.s_ref,handles.s_nseq,handles.s_trans,handles.s_maxProb,handles.s_ins,handles.s_seg,handles.s_min]= HandleStruct{1,1:7};
-
-
-elseif Initial_Setup
-    return
-end
-
-
 
 % End initialization code - DO NOT EDIT
 
@@ -78,6 +60,7 @@ handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
+
 
 % UIWAIT makes VisualsGui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -118,9 +101,7 @@ function s_ref_Callback(hObject, eventdata, handles)
 handles.refState=floor(get(handles.s_ref,'Value'));
 guidata(hObject,handles);
 set(handles.disp_ref,'String',num2str(handles.refState));
-set(handles.disp_ref,'Visible','On');
-
-fprintf('\n S_1_Variable value is %s \n',num2str(handles.refState));
+guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -140,16 +121,14 @@ end
 
 
 
-% --- Executes on button press in s_setup.
-function s_setup_Callback(hObject, eventdata, handles)
-% hObject    handle to s_setup (see GCBO)
+% --- Executes on button press in s_default.
+function s_default_Callback(hObject, eventdata, handles)
+% hObject    handle to s_default (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 %% Load data
 load data_clusterseq
 
-% disp('**********');
-% disp('... Clustering factor analyzer state sequences ...');
 
 
 handles.dataInfo=dataInfo;
@@ -182,339 +161,363 @@ guidata(hObject,handles)
 
 %% refState Slider Setup
 
+set(handles.disp_ref, 'String', num2str(1))
+set(handles.s_ref, 'Value', 1)
+handles.refState=1;
+guidata(hObject,handles)
+
 %Will have to get numstates into the third input of the SettingsGen
 %function for refState max
 handles.setup_ref = SettingsGen(1,0,handles.nStates,1/handles.nStates,1/handles.nStates,10,60,40,2,.1);
-handles.refState=handles.setup_ref{1};
 guidata(hObject,handles)
 
 
 % refState Slider Setup
-set(handles.s_ref, 'Visible' , 'Off')
-set(handles.s_ref, 'Value' , handles.setup_ref{1})
-set(handles.s_ref, 'Min' , handles.setup_ref{2})
+
+% set(handles.s_ref, 'Visible' , 'Off')
+% set(handles.s_ref, 'Value' , handles.setup_ref{1})
+% set(handles.s_ref, 'Min' , handles.setup_ref{2})
 set(handles.s_ref, 'Max' , handles.setup_ref{3})
 set(handles.s_ref, 'SliderStep' , [handles.setup_ref{4}, handles.setup_ref{5}])
-set(handles.s_ref, 'Position' , handles.setup_ref{6})
-set(handles.s_ref, 'Visible' , 'On')
+% set(handles.s_ref, 'Position' , handles.setup_ref{6})
+% set(handles.s_ref, 'Visible' , 'On')
 guidata(hObject,handles)
 
 % min value display setup 
-set(handles.min_ref, 'String', num2str(handles.setup_ref{2}))
-set(handles.min_ref,'Position', handles.setup_ref{7})
-set(handles.min_ref, 'Visible' , 'On')
-guidata(hObject,handles)
+% set(handles.min_ref, 'String', num2str(handles.setup_ref{2}))
+% set(handles.min_ref,'Position', handles.setup_ref{7})
+% set(handles.min_ref, 'Visible' , 'On')
+% guidata(hObject,handles)
 
 % max value display setup 
-set(handles.max_ref, 'String', num2str(handles.setup_ref{3}))
-set(handles.max_ref,'Position', handles.setup_ref{8})
-set(handles.max_ref, 'Visible' , 'On')
+set(handles.max_ref, 'String', num2str(handles.nStates))
+% set(handles.max_ref,'Position', handles.setup_ref{8})
+% set(handles.max_ref, 'Visible' , 'On')
 guidata(hObject,handles)
 
 % slider varialbe title display setup 
-set(handles.title_ref, 'String', 'refState (default:1)') 
-set(handles.title_ref,'Position', handles.setup_ref{9})
-set(handles.title_ref, 'Visible' , 'On')
-guidata(hObject,handles)
+% set(handles.title_ref, 'String', 'refState (default:1)') 
+% set(handles.title_ref,'Position', handles.setup_ref{9})
+% set(handles.title_ref, 'Visible' , 'On')
+% guidata(hObject,handles)
 
-%slider current value display
-set(handles.disp_ref, 'String', num2str(handles.refState))
-set(handles.disp_ref, 'Position', handles.setup_ref{10})
-set(handles.disp_ref, 'Visible' , 'On')
-guidata(hObject,handles)
+% %slider current value display
+% set(handles.disp_ref, 'String', num2str(handles.refState))
+% set(handles.disp_ref, 'Position', handles.setup_ref{10})
+% set(handles.disp_ref, 'Visible' , 'On')
+% guidata(hObject,handles)
 
 %end of slider setup for refState
 
 %% nSeqMax Slider Setup
 
-
-handles.setup_nseq = SettingsGen(20,0,200,.005,.01,10,55,40,2,.1);
-
-
-
- % Slider Setup
-set(handles.s_nseq, 'Visible' , 'Off')
-set(handles.s_nseq, 'Value' , handles.setup_nseq{1})
-
-set(handles.s_nseq, 'Min' , handles.setup_nseq{2})
-set(handles.s_nseq, 'Max' , handles.setup_nseq{3})
-set(handles.s_nseq, 'SliderStep' , [handles.setup_nseq{4}, handles.setup_nseq{5}])
-set(handles.s_nseq, 'Position' , handles.setup_nseq{6})
-set(handles.s_nseq, 'Visible' , 'On')
+set(handles.disp_nseq, 'String', num2str(20))
+set(handles.s_nseq, 'Value', 20)
+handles.nSeqMax=20;
 guidata(hObject,handles)
 
-% min value display setup 
-set(handles.min_nseq, 'String', num2str(handles.setup_nseq{2}))
-set(handles.min_nseq,'Position', handles.setup_nseq{7})
-set(handles.min_nseq, 'Visible' , 'On')
-guidata(hObject,handles)
 
-% max value display setup 
-set(handles.max_nseq, 'String', num2str(handles.setup_nseq{3}))
-set(handles.max_nseq,'Position', handles.setup_nseq{8})
-set(handles.max_nseq, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% slider varialbe title display setup 
-set(handles.title_nseq, 'String', 'nSeqMax (default:20)') 
-set(handles.title_nseq,'Position', handles.setup_nseq{9})
-set(handles.title_nseq, 'Visible' , 'On')
-guidata(hObject,handles)
-
-%slider current value display
-set(handles.disp_nseq, 'String', num2str(handles.setup_nseq{1}))
-set(handles.disp_nseq, 'Position', handles.setup_nseq{10})
-set(handles.disp_nseq, 'Visible' , 'On')
-guidata(hObject,handles)
-
-if handles.setup_nseq{1}== floor(get(handles.s_nseq,'Value'))
-    handles.nSeqMax=handles.setup_nseq{1};
-else 
-    handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
-end
-guidata(hObject,handles)
+% handles.setup_nseq = SettingsGen(20,0,200,.005,.01,10,55,40,2,.1);
+% 
+% 
+% 
+%  % Slider Setup
+% set(handles.s_nseq, 'Visible' , 'Off')
+% set(handles.s_nseq, 'Value' , handles.setup_nseq{1})
+% 
+% set(handles.s_nseq, 'Min' , handles.setup_nseq{2})
+% set(handles.s_nseq, 'Max' , handles.setup_nseq{3})
+% set(handles.s_nseq, 'SliderStep' , [handles.setup_nseq{4}, handles.setup_nseq{5}])
+% set(handles.s_nseq, 'Position' , handles.setup_nseq{6})
+% set(handles.s_nseq, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % min value display setup 
+% set(handles.min_nseq, 'String', num2str(handles.setup_nseq{2}))
+% set(handles.min_nseq,'Position', handles.setup_nseq{7})
+% set(handles.min_nseq, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % max value display setup 
+% set(handles.max_nseq, 'String', num2str(handles.setup_nseq{3}))
+% set(handles.max_nseq,'Position', handles.setup_nseq{8})
+% set(handles.max_nseq, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % slider varialbe title display setup 
+% set(handles.title_nseq, 'String', 'nSeqMax (default:20)') 
+% set(handles.title_nseq,'Position', handles.setup_nseq{9})
+% set(handles.title_nseq, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% %slider current value display
+% set(handles.disp_nseq, 'String', num2str(handles.setup_nseq{1}))
+% set(handles.disp_nseq, 'Position', handles.setup_nseq{10})
+% set(handles.disp_nseq, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% if handles.setup_nseq{1}== floor(get(handles.s_nseq,'Value'))
+%     handles.nSeqMax=handles.setup_nseq{1};
+% else 
+%     handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
+% end
+% guidata(hObject,handles)
 
 %end of slider setup for nSeqMax
 
 %% transientLenThr Slider Setup
 
-
-handles.setup_trans = SettingsGen(5,1,20,1/20,5/20,10,50,40,2,.1);
-
-
-
- % Slider Setup
-set(handles.s_trans, 'Visible' , 'Off')
-set(handles.s_trans, 'Value' , handles.setup_trans{1})
-set(handles.s_trans, 'Min' , handles.setup_trans{2})
-set(handles.s_trans, 'Max' , handles.setup_trans{3})
-set(handles.s_trans, 'SliderStep' , [handles.setup_trans{4}, handles.setup_trans{5}])
-set(handles.s_trans, 'Position' , handles.setup_trans{6})
-set(handles.s_trans, 'Visible' , 'On')
+set(handles.disp_trans, 'String', num2str(5))
+set(handles.s_trans, 'Value', 5)
+handles.transientLenThr=5;
 guidata(hObject,handles)
 
-% min value display setup 
-set(handles.min_trans, 'String', num2str(handles.setup_trans{2}))
-set(handles.min_trans,'Position', handles.setup_trans{7})
-set(handles.min_trans, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% max value display setup 
-set(handles.max_trans, 'String', num2str(handles.setup_trans{3}))
-set(handles.max_trans,'Position', handles.setup_trans{8})
-set(handles.max_trans, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% slider varialbe title display setup 
-set(handles.title_trans, 'String', ' transientLenThr (default:5)') 
-set(handles.title_trans,'Position', handles.setup_trans{9})
-set(handles.title_trans, 'Visible' , 'On')
-guidata(hObject,handles)
-
-%slider current value display
-set(handles.disp_trans, 'String', num2str(handles.setup_trans{1}))
-set(handles.disp_trans, 'Position', handles.setup_trans{10})
-set(handles.disp_trans, 'Visible' , 'On')
-guidata(hObject,handles)
-
-if handles.setup_trans{1}== floor(get(handles.s_trans,'Value'))
-    handles.transientLenThr=handles.setup_trans{1};
-else 
-    handles.transientLenThr=floor(get(handles.s_trans,'Value'));
-end
-guidata(hObject,handles)
+% handles.setup_trans = SettingsGen(5,1,20,1/20,5/20,10,50,40,2,.1);
+% 
+% 
+% 
+%  % Slider Setup
+% set(handles.s_trans, 'Visible' , 'Off')
+% set(handles.s_trans, 'Value' , handles.setup_trans{1})
+% set(handles.s_trans, 'Min' , handles.setup_trans{2})
+% set(handles.s_trans, 'Max' , handles.setup_trans{3})
+% set(handles.s_trans, 'SliderStep' , [handles.setup_trans{4}, handles.setup_trans{5}])
+% set(handles.s_trans, 'Position' , handles.setup_trans{6})
+% set(handles.s_trans, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % min value display setup 
+% set(handles.min_trans, 'String', num2str(handles.setup_trans{2}))
+% set(handles.min_trans,'Position', handles.setup_trans{7})
+% set(handles.min_trans, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % max value display setup 
+% set(handles.max_trans, 'String', num2str(handles.setup_trans{3}))
+% set(handles.max_trans,'Position', handles.setup_trans{8})
+% set(handles.max_trans, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % slider varialbe title display setup 
+% set(handles.title_trans, 'String', ' transientLenThr (default:5)') 
+% set(handles.title_trans,'Position', handles.setup_trans{9})
+% set(handles.title_trans, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% %slider current value display
+% set(handles.disp_trans, 'String', num2str(handles.setup_trans{1}))
+% set(handles.disp_trans, 'Position', handles.setup_trans{10})
+% set(handles.disp_trans, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% if handles.setup_trans{1}== floor(get(handles.s_trans,'Value'))
+%     handles.transientLenThr=handles.setup_trans{1};
+% else 
+%     handles.transientLenThr=floor(get(handles.s_trans,'Value'));
+% end
+% guidata(hObject,handles)
 
 %end of slider setup for transientLenThr
 %% maxProbTol Slider Setup
 
-
-handles.setup_maxProb = SettingsGen(5e-2,0,1,10e-4,1e-2,10,45,40,2,.1);
+set(handles.disp_maxProb, 'String', num2str(0.05))
+set(handles.s_maxProb, 'Value', 0.05)
+handles.maxProbTol=0.05;
 guidata(hObject,handles)
 
- % Slider Setup
-set(handles.s_maxProb, 'Value' , handles.setup_maxProb{1})
-set(handles.s_maxProb, 'Min' , handles.setup_maxProb{2})
-set(handles.s_maxProb, 'Max' , handles.setup_maxProb{3})
-set(handles.s_maxProb, 'SliderStep' , [handles.setup_maxProb{4}, handles.setup_maxProb{5}])
-set(handles.s_maxProb, 'Position' , handles.setup_maxProb{6})
-guidata(hObject,handles)
-
-% min value display setup 
-set(handles.min_maxProb, 'String', num2str(handles.setup_maxProb{2}))
-set(handles.min_maxProb,'Position', handles.setup_maxProb{7})
-set(handles.min_maxProb, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% max value display setup 
-set(handles.max_maxProb, 'String', num2str(handles.setup_maxProb{3}))
-set(handles.max_maxProb,'Position', handles.setup_maxProb{8})
-guidata(hObject,handles)
-
-% slider varialbe title display setup 
-set(handles.title_maxProb, 'String', 'maxProbTol (default:5e-2)') 
-set(handles.title_maxProb,'Position', handles.setup_maxProb{9})
-guidata(hObject,handles)
-
-%slider current value display
-set(handles.disp_maxProb, 'String', num2str(handles.setup_maxProb{1}))
-set(handles.disp_maxProb, 'Position', handles.setup_maxProb{10})
-guidata(hObject,handles)
-
-if handles.setup_maxProb{1}== get(handles.s_maxProb,'Value')
-    handles.maxProbTol=handles.setup_maxProb{1};
-else 
-    handles.maxProbTol=get(handles.s_maxProb,'Value');
-end
-guidata(hObject,handles)
+% handles.setup_maxProb = SettingsGen(5e-2,0,1,10e-4,1e-2,10,45,40,2,.1);
+% guidata(hObject,handles)
+% 
+%  % Slider Setup
+% set(handles.s_maxProb, 'Value' , handles.setup_maxProb{1})
+% set(handles.s_maxProb, 'Min' , handles.setup_maxProb{2})
+% set(handles.s_maxProb, 'Max' , handles.setup_maxProb{3})
+% set(handles.s_maxProb, 'SliderStep' , [handles.setup_maxProb{4}, handles.setup_maxProb{5}])
+% set(handles.s_maxProb, 'Position' , handles.setup_maxProb{6})
+% guidata(hObject,handles)
+% 
+% % min value display setup 
+% set(handles.min_maxProb, 'String', num2str(handles.setup_maxProb{2}))
+% set(handles.min_maxProb,'Position', handles.setup_maxProb{7})
+% set(handles.min_maxProb, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % max value display setup 
+% set(handles.max_maxProb, 'String', num2str(handles.setup_maxProb{3}))
+% set(handles.max_maxProb,'Position', handles.setup_maxProb{8})
+% guidata(hObject,handles)
+% 
+% % slider varialbe title display setup 
+% set(handles.title_maxProb, 'String', 'maxProbTol (default:5e-2)') 
+% set(handles.title_maxProb,'Position', handles.setup_maxProb{9})
+% guidata(hObject,handles)
+% 
+% %slider current value display
+% set(handles.disp_maxProb, 'String', num2str(handles.setup_maxProb{1}))
+% set(handles.disp_maxProb, 'Position', handles.setup_maxProb{10})
+% guidata(hObject,handles)
+% 
+% if handles.setup_maxProb{1}== get(handles.s_maxProb,'Value')
+%     handles.maxProbTol=handles.setup_maxProb{1};
+% else 
+%     handles.maxProbTol=get(handles.s_maxProb,'Value');
+% end
+% guidata(hObject,handles)
 
 %end of slider setup for maxProbTol
 
 %% insPenalty Slider Setup
-handles.setup_ins = SettingsGen(1,1,20,1/20,5/20,10,40,40,2,.1);
- % Slider Setup
-set(handles.s_ins, 'Visible' , 'Off')
-set(handles.s_ins, 'Value' , handles.setup_ins{1})
-set(handles.s_ins, 'Min' , handles.setup_ins{2})
-set(handles.s_ins, 'Max' , handles.setup_ins{3})
-set(handles.s_ins, 'SliderStep' , [handles.setup_ins{4}, handles.setup_ins{5}])
-set(handles.s_ins, 'Position' , handles.setup_ins{6})
-set(handles.s_ins, 'Visible' , 'On')
+
+%slider Default Value Reset and display
+set(handles.disp_ins, 'String', num2str(1))
+set(handles.s_ins, 'Value', 1)
+handles.insPenalty=1;
 guidata(hObject,handles)
 
-% min value display setup 
-set(handles.min_ins, 'Visible' , 'Off')
-set(handles.min_ins, 'String', num2str(handles.setup_ins{2}))
-set(handles.min_ins,'Position', handles.setup_ins{7})
-set(handles.min_ins, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% max value display setup
-set(handles.max_ins, 'Visible' , 'Off')
-set(handles.max_ins, 'String', num2str(handles.setup_ins{3}))
-set(handles.max_ins,'Position', handles.setup_ins{8})
-set(handles.max_ins, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% slider varialbe title display setup 
-set(handles.title_ins, 'Visible' , 'Off')
-set(handles.title_ins, 'String', ' insPenalty (default: 1)') 
-set(handles.title_ins,'Position', handles.setup_ins{9})
-set(handles.title_ins, 'Visible' , 'On')
-guidata(hObject,handles)
-
-%slider current value display
-set(handles.disp_ins, 'String', num2str(handles.setup_ins{1}))
-set(handles.disp_ins, 'Position', handles.setup_ins{10})
-set(handles.disp_ins, 'Visible' , 'On')
-guidata(hObject,handles)
-
-if handles.setup_ins{1}== floor(get(handles.s_ins,'Value'))
-    handles.insPenalty=handles.setup_ins{1};
-else 
-    handles.insPenalty=floor(get(handles.s_ins,'Value'));
-end
-guidata(hObject,handles)
+% handles.setup_ins = SettingsGen(1,1,20,1/20,5/20,10,40,40,2,.1);
+%  % Slider Setup
+% set(handles.s_ins, 'Visible' , 'Off')
+% set(handles.s_ins, 'Value' , handles.setup_ins{1})
+% set(handles.s_ins, 'Min' , handles.setup_ins{2})
+% set(handles.s_ins, 'Max' , handles.setup_ins{3})
+% set(handles.s_ins, 'SliderStep' , [handles.setup_ins{4}, handles.setup_ins{5}])
+% set(handles.s_ins, 'Position' , handles.setup_ins{6})
+% set(handles.s_ins, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % min value display setup 
+% set(handles.min_ins, 'Visible' , 'Off')
+% set(handles.min_ins, 'String', num2str(handles.setup_ins{2}))
+% set(handles.min_ins,'Position', handles.setup_ins{7})
+% set(handles.min_ins, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % max value display setup
+% set(handles.max_ins, 'Visible' , 'Off')
+% set(handles.max_ins, 'String', num2str(handles.setup_ins{3}))
+% set(handles.max_ins,'Position', handles.setup_ins{8})
+% set(handles.max_ins, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % slider varialbe title display setup 
+% set(handles.title_ins, 'Visible' , 'Off')
+% set(handles.title_ins, 'String', ' insPenalty (default: 1)') 
+% set(handles.title_ins,'Position', handles.setup_ins{9})
+% set(handles.title_ins, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% %slider current value display
+% set(handles.disp_ins, 'String', num2str(handles.setup_ins{1}))
+% set(handles.disp_ins, 'Position', handles.setup_ins{10})
+% set(handles.disp_ins, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% if handles.setup_ins{1}== floor(get(handles.s_ins,'Value'))
+%     handles.insPenalty=handles.setup_ins{1};
+% else 
+%     handles.insPenalty=floor(get(handles.s_ins,'Value'));
+% end
+% guidata(hObject,handles)
 
 %end of slider setup for insPenalty
 
 
 %% segPenalty Slider Setup
-handles.setup_seg = SettingsGen(10,0,100,1/100,10/100,10,35,40,2,.1);
+% handles.setup_seg = SettingsGen(10,0,100,1/100,10/100,10,35,40,2,.1);
 
-
-
- % Slider Setup
-set(handles.s_seg, 'Visible' , 'Off')
-set(handles.s_seg, 'Value' , handles.setup_seg{1})
-set(handles.s_seg, 'Min' , handles.setup_seg{2})
-set(handles.s_seg, 'Max' , handles.setup_seg{3})
-set(handles.s_seg, 'SliderStep' , [handles.setup_seg{4}, handles.setup_seg{5}])
-set(handles.s_seg, 'Position' , handles.setup_seg{6})
-set(handles.s_seg, 'Visible' , 'On')
+%slider Default Value Reset and display
+set(handles.disp_seg, 'String', num2str(10))
+set(handles.s_seg, 'Value', 10)
+handles.segPenalty=10;
 guidata(hObject,handles)
 
-% min value display setup 
-set(handles.min_seg, 'Visible' , 'Off')
-set(handles.min_seg, 'String', num2str(handles.setup_seg{2}))
-set(handles.min_seg,'Position', handles.setup_seg{7})
-set(handles.min_seg, 'Visible' , 'On')
-guidata(hObject,handles)
 
-% max value display setup
-set(handles.max_seg, 'Visible' , 'Off')
-set(handles.max_seg, 'String', num2str(handles.setup_seg{3}))
-set(handles.max_seg,'Position', handles.setup_seg{8})
-set(handles.max_seg, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% slider varialbe title display setup 
-set(handles.title_seg, 'Visible' , 'Off')
-set(handles.title_seg, 'String', ' segPenalty (default: 10)') 
-set(handles.title_seg,'Position', handles.setup_seg{9})
-set(handles.title_seg, 'Visible' , 'On')
-guidata(hObject,handles)
-
-%slider current value display
-set(handles.disp_seg, 'String', num2str(handles.setup_seg{1}))
-set(handles.disp_seg, 'Position', handles.setup_seg{10})
-set(handles.disp_seg, 'Visible' , 'On')
-guidata(hObject,handles)
-
-if handles.setup_seg{1}== floor(get(handles.s_seg,'Value'))
-    handles.segPenalty=handles.setup_seg{1};
-else 
-    handles.segPenalty=floor(get(handles.s_seg,'Value'));
-end
-guidata(hObject,handles)
+%  % Slider Setup
+% set(handles.s_seg, 'Visible' , 'Off')
+% set(handles.s_seg, 'Value' , handles.setup_seg{1})
+% set(handles.s_seg, 'Min' , handles.setup_seg{2})
+% set(handles.s_seg, 'Max' , handles.setup_seg{3})
+% set(handles.s_seg, 'SliderStep' , [handles.setup_seg{4}, handles.setup_seg{5}])
+% set(handles.s_seg, 'Position' , handles.setup_seg{6})
+% set(handles.s_seg, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % min value display setup 
+% set(handles.min_seg, 'Visible' , 'Off')
+% set(handles.min_seg, 'String', num2str(handles.setup_seg{2}))
+% set(handles.min_seg,'Position', handles.setup_seg{7})
+% set(handles.min_seg, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % max value display setup
+% set(handles.max_seg, 'Visible' , 'Off')
+% set(handles.max_seg, 'String', num2str(handles.setup_seg{3}))
+% set(handles.max_seg,'Position', handles.setup_seg{8})
+% set(handles.max_seg, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % slider varialbe title display setup 
+% set(handles.title_seg, 'Visible' , 'Off')
+% set(handles.title_seg, 'String', ' segPenalty (default: 10)') 
+% set(handles.title_seg,'Position', handles.setup_seg{9})
+% set(handles.title_seg, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% %slider current value display
+% set(handles.disp_seg, 'String', num2str(handles.setup_seg{1}))
+% set(handles.disp_seg, 'Position', handles.setup_seg{10})
+% set(handles.disp_seg, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% if handles.setup_seg{1}== floor(get(handles.s_seg,'Value'))
+%     handles.segPenalty=handles.setup_seg{1};
+% else 
+%     handles.segPenalty=floor(get(handles.s_seg,'Value'));
+% end
+% guidata(hObject,handles)
 
 %end of slider setup for segPenalty
 
 %% minDistTol Slider Setup
-handles.setup_min = SettingsGen(0,0,40,1/40,5/40,10,30,40,2,.1);
+% handles.setup_min = SettingsGen(0,0,40,1/40,5/40,10,30,40,2,.1);
+% 
+%  % Slider Setup
+% set(handles.s_min, 'Visible' , 'Off')
+% set(handles.s_min, 'Value' , handles.setup_min{1})
+% set(handles.s_min, 'Min' , handles.setup_min{2})
+% set(handles.s_min, 'Max' , handles.setup_min{3})
+% set(handles.s_min, 'SliderStep' , [handles.setup_min{4}, handles.setup_min{5}])
+% set(handles.s_min, 'Position' , handles.setup_min{6})
+% set(handles.s_min, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % min value display setup 
+% set(handles.min_min, 'Visible' , 'Off')
+% set(handles.min_min, 'String', num2str(handles.setup_min{2}))
+% set(handles.min_min,'Position', handles.setup_min{7})
+% set(handles.min_min, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % max value display setup
+% set(handles.max_min, 'Visible' , 'Off')
+% set(handles.max_min, 'String', num2str(handles.setup_min{3}))
+% set(handles.max_min,'Position', handles.setup_min{8})
+% set(handles.max_min, 'Visible' , 'On')
+% guidata(hObject,handles)
+% 
+% % slider varialbe title display setup 
+% set(handles.title_min, 'Visible' , 'Off')
+% set(handles.title_min, 'String', ' minDistTol (default: 0)') 
+% set(handles.title_min,'Position', handles.setup_min{9})
+% set(handles.title_min, 'Visible' , 'On')
+% guidata(hObject,handles)
 
- % Slider Setup
-set(handles.s_min, 'Visible' , 'Off')
-set(handles.s_min, 'Value' , handles.setup_min{1})
-set(handles.s_min, 'Min' , handles.setup_min{2})
-set(handles.s_min, 'Max' , handles.setup_min{3})
-set(handles.s_min, 'SliderStep' , [handles.setup_min{4}, handles.setup_min{5}])
-set(handles.s_min, 'Position' , handles.setup_min{6})
-set(handles.s_min, 'Visible' , 'On')
+%slider Default Value Reset and display
+set(handles.disp_min, 'String', num2str(0))
+set(handles.s_min, 'Value', 0)
+handles.minDistTol=0;
 guidata(hObject,handles)
 
-% min value display setup 
-set(handles.min_min, 'Visible' , 'Off')
-set(handles.min_min, 'String', num2str(handles.setup_min{2}))
-set(handles.min_min,'Position', handles.setup_min{7})
-set(handles.min_min, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% max value display setup
-set(handles.max_min, 'Visible' , 'Off')
-set(handles.max_min, 'String', num2str(handles.setup_min{3}))
-set(handles.max_min,'Position', handles.setup_min{8})
-set(handles.max_min, 'Visible' , 'On')
-guidata(hObject,handles)
-
-% slider varialbe title display setup 
-set(handles.title_min, 'Visible' , 'Off')
-set(handles.title_min, 'String', ' minDistTol (default: 0)') 
-set(handles.title_min,'Position', handles.setup_min{9})
-set(handles.title_min, 'Visible' , 'On')
-guidata(hObject,handles)
-
-%slider current value display
-set(handles.disp_min, 'String', num2str(handles.setup_min{1}))
-set(handles.disp_min, 'Position', handles.setup_min{10})
-set(handles.disp_min, 'Visible' , 'On')
-guidata(hObject,handles)
-
-if handles.setup_min{1}== floor(get(handles.s_min,'Value'))
-    handles.minDistTol=handles.setup_min{1};
-else 
-    handles.minDistTol=floor(get(handles.s_min,'Value'));
-end
-guidata(hObject,handles)
 %end of slider setup for minDistTol
 
 
@@ -528,18 +531,12 @@ function s_nseq_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
-if handles.setup_nseq{1}== floor(get(handles.s_nseq,'Value'))
-%    disp('if 1')
-     handles.nSeqMax=handles.setup_nseq{1};
-else 
-    handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
-%     disp('if 2 , value change')
-%     fprintf('\n nSeqMax_Variable value is %s \n',num2str(handles.nSeqMax));
-end
-guidata(hObject,handles)
+handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
+guidata(hObject,handles);
+set(handles.disp_nseq,'String',num2str(handles.nSeqMax));
+guidata(hObject,handles);
 
-set(handles.disp_nseq, 'String', num2str(handles.nSeqMax))
-guidata(hObject,handles)
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -562,14 +559,11 @@ function s_trans_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-if handles.setup_trans{1}== floor(get(handles.s_trans,'Value'))
-    handles.transientLenThr=handles.setup_trans{1};
-else 
-    handles.transientLenThr=floor(get(handles.s_trans,'Value'));
-end
-guidata(hObject,handles)
-set(handles.disp_trans, 'String', num2str(handles.transientLenThr))
 
+handles.transientLenThr=floor(get(handles.s_trans,'Value'));
+guidata(hObject,handles);
+set(handles.disp_trans,'String', num2str(handles.transientLenThr))
+guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -595,11 +589,7 @@ function s_maxProb_Callback(hObject, eventdata, handles)
 
 
 
-if handles.setup_maxProb{1}==get(handles.s_maxProb,'Value')
-    handles.maxProbTol=handles.setup_maxProb{1};
-else 
-    handles.maxProbTol=get(handles.s_maxProb,'Value');
-end
+handles.maxProbTol=get(handles.s_maxProb,'Value');
 guidata(hObject,handles)
 set(handles.disp_maxProb, 'String', num2str(handles.maxProbTol))
 guidata(hObject,handles)
@@ -624,13 +614,21 @@ function button_update_Callback(hObject, eventdata, handles)
 % hObject    handle to button_update (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles.refState=floor(get(handles.s_ref,'Value'));
+handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
+handles.transientLenThr=floor(get(handles.s_trans,'Value'));
+handles.maxProbTol=get(handles.s_maxProb,'Value');
+handles.insPenalty=floor(get(handles.s_ins,'Value'));
+handles.segPenalty=floor(get(handles.s_seg,'Value'));
+handles.minDistTol=floor(get(handles.s_min,'Value'));
+guidata(hObject,handles)
 
-global axes1
-global axes2
-axes1=handles.axes1;
-axes2=handles.axes2;
- 
-script_clusterseq2(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol);
+
+axes_VisualsGui=handles.axes_VisualsGui;
+
+
+script_clusterseq2(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,axes_VisualsGui);
+guidata(hObject,handles)
 
 
 % --- Executes on slider movement.
@@ -641,13 +639,9 @@ function s_ins_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-if handles.setup_ins{1}== floor(get(handles.s_ins,'Value'))
-    handles.insPenalty=handles.setup_ins{1};
-else 
-    handles.insPenalty=floor(get(handles.s_ins,'Value'));
-end
+handles.insPenalty=floor(get(handles.s_ins,'Value'));
 guidata(hObject,handles)
-set(handles.disp_ins,'String',num2str(floor(get(handles.s_ins,'Value'))))
+set(handles.disp_ins,'String',num2str(handles.insPenalty))
 guidata(hObject,handles)
 
 % --- Executes during object creation, after setting all properties.
@@ -670,13 +664,10 @@ function s_seg_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-if handles.setup_seg{1}== floor(get(handles.s_seg,'Value'))
-    handles.segPenalty=handles.setup_seg{1};
-else 
-    handles.segPenalty=floor(get(handles.s_seg,'Value'));
-end
+
+handles.segPenalty=floor(get(handles.s_seg,'Value'));
 guidata(hObject,handles)
-set(handles.disp_seg,'String',num2str(floor(get(handles.s_seg,'Value'))))
+set(handles.disp_seg,'String',num2str(handles.segPenalty))
 guidata(hObject,handles)
 
 % --- Executes during object creation, after setting all properties.
@@ -699,11 +690,8 @@ function s_min_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-if handles.setup_min{1}== floor(get(handles.s_min,'Value'))
-    handles.minDistTol=handles.setup_min{1};
-else 
-    handles.minDistTol=floor(get(handles.s_min,'Value'));
-end
+
+handles.minDistTol=floor(get(handles.s_min,'Value'));
 guidata(hObject,handles)
 set(handles.disp_min,'String',num2str(handles.minDistTol))
 guidata(hObject,handles)
