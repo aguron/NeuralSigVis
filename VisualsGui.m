@@ -117,10 +117,6 @@ end
 
 
 
-
-
-
-
 % --- Executes on button press in s_default.
 
 function s_default_Callback(hObject, eventdata, handles)
