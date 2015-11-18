@@ -654,6 +654,7 @@ function Select_File_Callback(hObject, eventdata, handles)
 [FileName,PathName] = uigetfile('*.mat','Select the desired MATLAB .mat file');
 
 if FileName ~=0
+    disp('Loading File...')
 uiopen(FileName,1);
 handles.FileName=FileName;
 
@@ -691,5 +692,5 @@ guidata(hObject,handles)
 
 
 elseif FileName==0
-    disp('Error Loading File')
+    disp('No file loaded')
 end
