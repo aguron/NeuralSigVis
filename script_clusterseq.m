@@ -44,7 +44,7 @@ disp('**********');
 disp('**********');
 disp('... View clustered factor analyzer state sequences ...');
 %
-pa                          = 1;
+pa                          = 2;
 viewclusters(groupingTrain{pa},'minEdgeCrossings',true,'txt',cellstr(num2str(dataInfo{pa})));
 % viewclusters(groupingTrain{pa},'minEdgeCrossings',true,'txt',[]);
 %
