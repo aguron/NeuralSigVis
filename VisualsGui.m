@@ -132,7 +132,7 @@ guidata(hObject,handles)
 
 
 FileName=handles.FileName;
-if FileName==0 
+if FileName==0 || isempty(FileName)
 disp('No file loaded')
 
 % %set nStates to 4 if no file has been loaded 
@@ -140,10 +140,6 @@ disp('No file loaded')
 % guidata(hObject,handles)
 
 else
-    
-    
-    
-end
 set(handles.max_ref, 'String', num2str(handles.nStates))    
 set(handles.s_ref, 'Max' , handles.nStates)
 set(handles.s_ref, 'SliderStep' , [1/handles.nStates, 1/handles.nStates])
