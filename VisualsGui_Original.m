@@ -1,35 +1,35 @@
-function varargout = VisualsGui(varargin)
-% VISUALSGUI MATLAB code for VisualsGui.fig
-%      VISUALSGUI, by itself, creates a new VISUALSGUI or raises the existing
+function varargout = VisualsGui_Original(varargin)
+% VISUALSGUI_ORIGINAL MATLAB code for VisualsGui_Original.fig
+%      VISUALSGUI_ORIGINAL, by itself, creates a new VISUALSGUI_ORIGINAL or raises the existing
 %      singleton*.
 %
-%      H = VISUALSGUI returns the handle to a new VISUALSGUI or the handle to
+%      H = VISUALSGUI_ORIGINAL returns the handle to a new VISUALSGUI_ORIGINAL or the handle to
 %      the existing singleton*.
 %
-%      VISUALSGUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in VISUALSGUI.M with the given input arguments.
+%      VISUALSGUI_ORIGINAL('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in VISUALSGUI_ORIGINAL.M with the given input arguments.
 %
-%      VISUALSGUI('Property','Value',...) creates a new VISUALSGUI or raises the
+%      VISUALSGUI_ORIGINAL('Property','Value',...) creates a new VISUALSGUI_ORIGINAL or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before VisualsGui_OpeningFcn gets called.  An
+%      applied to the GUI before VisualsGui_Original_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to VisualsGui_OpeningFcn via varargin.
+%      stop.  All inputs are passed to VisualsGui_Original_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help VisualsGui
+% Edit the above text to modify the response to help VisualsGui_Original
 
-% Last Modified by GUIDE v2.5 14-Nov-2015 22:02:03
+% Last Modified by GUIDE v2.5 18-Nov-2015 16:05:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @VisualsGui_OpeningFcn, ...
-                   'gui_OutputFcn',  @VisualsGui_OutputFcn, ...
+                   'gui_OpeningFcn', @VisualsGui_Original_OpeningFcn, ...
+                   'gui_OutputFcn',  @VisualsGui_Original_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -47,27 +47,27 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before VisualsGui is made visible.
-function VisualsGui_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before VisualsGui_Original is made visible.
+function VisualsGui_Original_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to VisualsGui (see VARARGIN)
+% varargin   command line arguments to VisualsGui_Original (see VARARGIN)
 
-% Choose default command line output for VisualsGui
+% Choose default command line output for VisualsGui_Original
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
 
-% UIWAIT makes VisualsGui wait for user response (see UIRESUME)
+% UIWAIT makes VisualsGui_Original wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = VisualsGui_OutputFcn(hObject, eventdata, handles) 
+function varargout = VisualsGui_Original_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB

@@ -569,7 +569,7 @@ guidata(hObject,handles)
 axes_VisualsGui=handles.axes_VisualsGui;
 FileName=handles.FileName;
 
-script_clusterseq2(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,axes_VisualsGui,FileName);
+script_clusterseq1(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,axes_VisualsGui,FileName);
 guidata(hObject,handles)
 
 

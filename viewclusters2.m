@@ -6,7 +6,7 @@ function figures = viewclusters2(axesHandle,grouping, varargin)
   txt                       = [];
   assignopts(who, varargin);
 
-  
+  disp('Generating Visuals')
 axesHandle;
   subplot(2,1,1)
   % plot cliques
