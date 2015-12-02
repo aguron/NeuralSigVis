@@ -41,8 +41,7 @@ function figures = viewclusters(grouping, varargin)
   theta                         = theta(1:end-1);
   [x,y]                         = pol2cart(theta,1); % rho = 1;
   figures                       = [];
-  textSize                    = 10;
-  
+
   if (graphOpts.undirected.visibility || graphOpts.undirected.handle)
     figures                     = [figures, show];
     if ~(graphOpts.undirected.visibility)
@@ -58,7 +57,7 @@ function figures = viewclusters(grouping, varargin)
     if isempty(txt)
       txt                       = cellstr(num2str((1:N)',['% ', num2str(ceil(log10(N+1))), 'd']));
     end % if isempty(txt)
-%     textSize                    = 10;
+    textSize                    = 10;
     if (~minEdgeCrossings)
       h                         = text(x*1.05, y*1.05, txt, 'FontSize',textSize);
       set(h, {'Rotation'}, num2cell(theta*180/pi)');
@@ -234,6 +233,7 @@ function figures = viewclusters(grouping, varargin)
     if isempty(txt)
       txt                       = cellstr(num2str((1:N)',['% ', num2str(ceil(log10(N+1))), 'd']));
     end % if isempty(txt)
+    textSize                    = 10;
     if (~minEdgeCrossings)
       h                         = text(x*1.05, y*1.05, txt, 'FontSize',textSize);
       set(h, {'Rotation'}, num2cell(theta*180/pi)');
