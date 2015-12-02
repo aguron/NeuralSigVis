@@ -1,4 +1,4 @@
-function figures = viewclusters2(axesHandle,grouping, varargin)
+function figures = viewclusters2(axes_Handle,grouping, varargin)
 %VIEWCLUSTERS
 
   PoincareHypDisks          = true; % default: true
@@ -7,7 +7,7 @@ function figures = viewclusters2(axesHandle,grouping, varargin)
   assignopts(who, varargin);
 
   
-axesHandle;
+axes_Handle;
   subplot(2,1,1)
   % plot cliques
   %

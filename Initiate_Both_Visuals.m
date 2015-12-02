@@ -1,4 +1,4 @@
-function script_clusterseq2(nSeqMax,refState,transientLenThr, maxProbTol,insPenalty,segPenalty, minDistTol,axesHandle,FileName)
+function Initiate_Both_Visuals(nSeqMax,refState,transientLenThr, maxProbTol,insPenalty,segPenalty, minDistTol,axesHandle,FileName)
        
 FileName=FileName;
 %%
