@@ -569,8 +569,11 @@ Undirected_Tag=false;
 Directed_Tag =true;
 Save_Tag = false;
 
+set(handles.Text_Box,'String','Generating Visuals')
+
 Initiate_Visuals(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
                    Undirected_Tag,Directed_Tag,Save_Tag);
+set(handles.Text_Box,'String','Visuals Generated')
                                   
 guidata(hObject,handles)
 

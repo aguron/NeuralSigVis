@@ -128,6 +128,7 @@ cla(axes_Handle);
 s=copyobj(allchild(h),axes_Handle);
 axis([-1 1 -1 1]);
 axis equal off
+axis on
 
 
 
