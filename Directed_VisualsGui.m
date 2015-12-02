@@ -567,9 +567,10 @@ guidata(hObject,handles)
 %adjust the following Tag variables for directed graph
 Undirected_Tag=false;
 Directed_Tag =true;
+Save_Tag = false;
 
-parameter_setup3(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
-                   Undirected_Tag,Directed_Tag);
+Initiate_Visuals(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
+                   Undirected_Tag,Directed_Tag,Save_Tag);
                                   
 guidata(hObject,handles)
 
