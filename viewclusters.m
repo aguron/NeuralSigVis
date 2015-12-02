@@ -233,6 +233,7 @@ function figures = viewclusters(grouping, varargin)
     if isempty(txt)
       txt                       = cellstr(num2str((1:N)',['% ', num2str(ceil(log10(N+1))), 'd']));
     end % if isempty(txt)
+    textSize                    = 10;
     if (~minEdgeCrossings)
       h                         = text(x*1.05, y*1.05, txt, 'FontSize',textSize);
       set(h, {'Rotation'}, num2cell(theta*180/pi)');
