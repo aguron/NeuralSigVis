@@ -208,9 +208,11 @@ function save_viewclusters_figure(grouping, varargin)
     
     %saving current figure
     
-    FileName=uiputfile('*.fig','Insert Desired Filename for the Undirected Figure.');
-    set(figures,'Visible','off')
-    close figures
+    [FileName,Path]=uiputfile('Undirected_Figure_Identifier.fig','Insert Desired Filename for the Undirected Figure.');
+%     set(gcf,'Visible','on')
+     savefig(figures,FileName);
+%     set(gcf,'Visible','off')
+     close figures
     
     
   end % if (graphOpts.undirected.visibility || graphOpts.undirected.handle)
@@ -378,8 +380,12 @@ function save_viewclusters_figure(grouping, varargin)
 
     
 FileName=uiputfile('*.fig','Insert Desired Filename for the Directed Figure.');
-    set(figures,'Visible','off')
-    close figures
+    set(gcf,'Visible','on')
+    uisave(figures,FileName);
+    set(gcf,'Visible','off')
+    close gcf
+    
+
    
   end % if (graphOpts.directed.visibility || graphOpts.directed.handle)
 
