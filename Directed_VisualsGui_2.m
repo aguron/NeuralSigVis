@@ -701,5 +701,6 @@ Save_Tag = true;
 
 Initiate_Visuals_Simpler(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
                    Undirected_Tag,Directed_Tag,Save_Tag);
+close gcf
                                   
 guidata(hObject,handles)

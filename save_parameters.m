@@ -4,12 +4,14 @@ assignopts(who,varagin)
 
 
 if Undirected_Tag==true && Directed_Tag == false
-   uisave({'nSeqMax','refState','transientLenThr','maxProbTol','insPenalty','segPenalty','minDistTol','graphOpts'},...
-          'Parameters_Undirected_Identifier.mat');  
+   clear Undirected_Tag
+   clear Directed_Tag
+   FileName=uiputfile('*.mat','Insert Desired Filename for the Parameters of the Undirected Figure.');  
 end % if Undirected_Tag==true && Directed_Tag == false
 
 
 if Undirected_Tag == false && Directed_Tag == true 
-    uisave({'nSeqMax','refState','transientLenThr','maxProbTol','insPenalty','segPenalty','minDistTol','graphOpts'},...
-          'Parameters_Directed_Identifier.mat');   
+   clear Undirected_Tag
+   clear Directed_Tag
+   FileName=uiputfile('*.mat','Insert Desired Filename for the Parameters of the Directed Figure.'');  
 end %Undirected_Tag == false && Directed_Tag == true 

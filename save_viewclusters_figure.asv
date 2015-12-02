@@ -208,7 +208,7 @@ function save_viewclusters_figure(grouping, varargin)
     
     %saving current figure
     
-    FileName=uiputfile('*.fig','Insert Desired Filename for the Undirected Figure.');
+    FileName=uiputfile('*.fig','Please input the desired filename for the undirected figure.');
     set(figures,'Visible','off')
     close figures
     
@@ -376,8 +376,7 @@ function save_viewclusters_figure(grouping, varargin)
     
     % save current figure
 
-    
-FileName=uiputfile('*.fig','Insert Desired Filename for the Directed Figure.');
+FileName=uiputfile('*.fig','Please input the desired filename for the directed figure.');
     set(figures,'Visible','off')
     close figures
    
