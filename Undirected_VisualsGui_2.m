@@ -22,7 +22,7 @@ function varargout = Undirected_VisualsGui_2(varargin)
 
 % Edit the above text to modify the response to help Undirected_VisualsGui_2
 
-% Last Modified by GUIDE v2.5 02-Dec-2015 08:55:42
+% Last Modified by GUIDE v2.5 02-Dec-2015 11:13:21
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -665,7 +665,7 @@ uiopen(FileName,1);
 handles.FileName=FileName;
 
 
-handles.nStates                =numstates(seq{:});
+handles.nStates                =numstates(seq);
 guidata(hObject,handles)
 
 %Setup nStates as max value for refState Slider
@@ -678,3 +678,33 @@ guidata(hObject,handles)
 elseif FileName==0
     disp('No File Loaded')
 end
+
+
+% --- Executes on button press in Save_Figure.
+function Save_Figure_Callback(hObject, eventdata, handles)
+% hObject    handle to Save_Figure (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.refState=floor(get(handles.s_ref,'Value'));
+handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
+handles.transientLenThr=floor(get(handles.s_trans,'Value'));
+handles.maxProbTol=get(handles.s_maxProb,'Value');
+handles.insPenalty=floor(get(handles.s_ins,'Value'));
+handles.segPenalty=floor(get(handles.s_seg,'Value'));
+handles.minDistTol=floor(get(handles.s_min,'Value'));
+guidata(hObject,handles)
+
+
+
+
+
+%set the following Tag variables for undirected graph
+Undirected_Tag=true; 
+Directed_Tag=false;
+Save_Tag = true;
+
+Initiate_Visuals_Simpler(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
+                   Undirected_Tag,Directed_Tag,Save_Tag);
+                                  
+guidata(hObject,handles)
+
