@@ -22,7 +22,7 @@ function varargout = Undirected_VisualsGui_2(varargin)
 
 % Edit the above text to modify the response to help Undirected_VisualsGui_2
 
-% Last Modified by GUIDE v2.5 02-Dec-2015 11:13:21
+% Last Modified by GUIDE v2.5 09-Dec-2015 09:59:28
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -85,7 +85,8 @@ function CloseButton_Callback(hObject, eventdata, handles)
 handles.close_string= 'Gui Closed Properly';
 guidata(hObject,handles);
 fprintf('\n %s \n',handles.close_string);
-close all;
+close all
+guidata(hObject,handles)
 
 
 
@@ -546,12 +547,18 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
+%
+%
+%
 
 % --- Executes on button press in Generate_Graphics.
 function Generate_Graphics_Callback(hObject, eventdata, handles)
 % hObject    handle to Generate_Graphics (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+disp('Generating Visuals...')
+set(handles.textBox,'string','Generating Visuals...')
+guidata(hObject,handles)
 handles.refState=floor(get(handles.s_ref,'Value'));
 handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
 handles.transientLenThr=floor(get(handles.s_trans,'Value'));
@@ -561,19 +568,35 @@ handles.segPenalty=floor(get(handles.s_seg,'Value'));
 handles.minDistTol=floor(get(handles.s_min,'Value'));
 guidata(hObject,handles)
 
-
-
-
-
-%set the following Tag variables for undirected graph
-Undirected_Tag=true; 
-Directed_Tag=false;
+%adjust the following Tag variables for undirected graph
+Undirected_Tag = true;
+Directed_Tag = false;
 Save_Tag = false;
 
-Initiate_Visuals_Simpler(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
-                   Undirected_Tag,Directed_Tag,Save_Tag);
-                                  
+% if handles.firstRun==true
+% handles.firstRun=false;
+% Current=struct;
+% else
+% close Current.fig
+% end
+
+[Current_fig,handles.axes_VisualsGui]=Initiate_Visuals_Demo(handles.nSeqMax,handles.refState,...
+    handles.transientLenThr,handles.maxProbTol,...
+    handles.insPenalty,handles.segPenalty,...
+    handles.minDistTol,handles.axes_VisualsGui,...
+    handles.FileName,Undirected_Tag,...
+    Directed_Tag,Save_Tag);
+
+% Current.fig=Current_fig;
+% guidata(Current_fig,Current)
+% Current.axes=findobj(Current_fig,'type','axes');
+% guidata(Current_fig,Current)
+               
+disp('Visuals Generation Complete.')
+set(handles.textBox,'string',' ')
+
 guidata(hObject,handles)
+
 
 
 % --- Executes on slider movement.
@@ -664,14 +687,17 @@ if FileName ~=0
 uiopen(FileName,1);
 handles.FileName=FileName;
 
+handles.firstRun=true;
 
-handles.nStates                =numstates(seq);
+handles.nStates=numstates(seq);
+
 guidata(hObject,handles)
 
 %Setup nStates as max value for refState Slider
 set(handles.s_ref, 'Max' , handles.nStates)
 set(handles.s_ref, 'SliderStep' , [1/handles.nStates, 1/handles.nStates])
 set(handles.max_ref, 'String', num2str(handles.nStates))
+
 guidata(hObject,handles)
 
 
@@ -685,64 +711,34 @@ function Save_Figure_Callback(hObject, eventdata, handles)
 % hObject    handle to Save_Figure (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-refState=floor(get(handles.s_ref,'Value'));
-nSeqMax=floor(get(handles.s_nseq,'Value'));
-transientLenThr=floor(get(handles.s_trans,'Value'));
-maxProbTol=get(handles.s_maxProb,'Value');
-insPenalty=floor(get(handles.s_ins,'Value'));
-segPenalty=floor(get(handles.s_seg,'Value'));
-minDistTol=floor(get(handles.s_min,'Value'));
+P.refState=floor(get(handles.s_ref,'Value'));
+P.nSeqMax=floor(get(handles.s_nseq,'Value'));
+P.transientLenThr=floor(get(handles.s_trans,'Value'));
+P.maxProbTol=get(handles.s_maxProb,'Value');
+P.insPenalty=floor(get(handles.s_ins,'Value'));
+P.segPenalty=floor(get(handles.s_seg,'Value'));
+P.minDistTol=floor(get(handles.s_min,'Value'));
 
-axes_Handle=handles.axes_VisualsGui;
 
+%adjust the following Tag variables for directed graph
+P.Undirected_Tag=false;
+P.Directed_Tag =true;
+P.Save_Tag = true;
+
+
+set(h,'visible','off')
+a=findobj(h,'type','axes');
+a1=allchild(a);
+
+FileName=uiputfile('*.','Insert desired filename for the figure.');
+set(h,'visible','on')
+saveas(a1,FileName(1:end-1),'fig');
+set(h,'visible','off')
+
+
+
+
+
+
+                             
 guidata(hObject,handles)
-
-
-
-%set the following Tag variables for undirected graph to be saved
-Undirected_Tag=true; 
-Directed_Tag=false;
-
-if Undirected_Tag==true && Directed_Tag == false
-% Please note that the following is for the UNDIRECTED graph GUI.
-
-graphOpts.undirected.visibility   = false;    % The figure generated should not be visible
-graphOpts.undirected.handle       = true;     % The argout (fig) is the number of the figure that you want to copy into your GUI
-graphOpts.directed.visibility     = false;
-graphOpts.directed.handle         = false;
-
-
-elseif Undirected_Tag==false && Directed_Tag==true
- % Please note that the following is for the DIRECTED graph GUI.
-
-graphOpts.undirected.visibility   = false;    % The figure generated should not be visible
-graphOpts.undirected.handle       = false;     % The argout (fig) is the number of the figure that you want to copy into your GUI
-graphOpts.directed.visibility     = false;
-graphOpts.directed.handle         = true;
-
-end
-
-%     Figure_Saver(handles.axes_VisualsGui,2);
-%    
-%    %prompts user to input filename for saving .mat file containing selected parameters of graphics figure
-%    save_parameters('nSeqMax',nSeqMax,...                                 
-%                  'refState',refState,...                                 
-%                  'transientLenThr',transientLenThr,...                     
-%                  'maxProbTol',maxProbTol ,...                               
-%                  'insPenalty',insPenalty,...                                 
-%                  'segPenalty',segPenalty,...                               
-%                  'minDistTol',minDistTol,...
-%                  'Undirected_Tag',Undirected_Tag,...
-%                  'Directed_Tag',Directed_Tag,...
-%                  'graphOpts',graphOpts,...
-%                  'Undirected_Tag',Undirected_Tag,...
-%                  'Directed_Tag',Directed_Tag,...
-%                  'graphOpts',graphOpts);
-%                   
-% 
-axes_Handle
-h=gca
-handles.axes_data=guidata(gca)
-
-guidata(hObject,handles)
-

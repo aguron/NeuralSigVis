@@ -85,7 +85,8 @@ function CloseButton_Callback(hObject, eventdata, handles)
 handles.close_string= 'Gui Closed Properly';
 guidata(hObject,handles);
 fprintf('\n %s \n',handles.close_string);
-close all;
+close all
+guidata(hObject,handles)
 
 
 
@@ -555,6 +556,9 @@ function Generate_Graphics_Callback(hObject, eventdata, handles)
 % hObject    handle to Generate_Graphics (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+disp('Generating Visuals...')
+set(handles.textBox,'string','Generating Visuals...')
+guidata(hObject,handles)
 handles.refState=floor(get(handles.s_ref,'Value'));
 handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
 handles.transientLenThr=floor(get(handles.s_trans,'Value'));
@@ -568,39 +572,29 @@ guidata(hObject,handles)
 Undirected_Tag=false;
 Directed_Tag =true;
 Save_Tag = false;
-%saving the olf figure
 
-if ~(isempty(handles.previous_fig))
-figure(handles.previous_fig)
-set(handles.previous_fig,'visible','off')
-close handles.previous_fig
-end
-if ~(isempty(handles.fig))
-handles.previous_fig=handles.fig;
-figure(handles.fig);
-set(handles.fig,'visible','off')
-closehandles.fig;
-end
+% if handles.firstRun==true
+% handles.firstRun=false;
+% Current=struct;
+% else
+% close Current.fig
+% end
 
-%make sure to open and close the figure associated with handles.fig
-
-
-[handles.fig,handles.handles.axes_VisualsGui]=Initiate_Visuals_Demo(handles.nSeqMax,handles.refState,...
+[Current_fig,handles.axes_VisualsGui]=Initiate_Visuals_Demo(handles.nSeqMax,handles.refState,...
     handles.transientLenThr,handles.maxProbTol,...
     handles.insPenalty,handles.segPenalty,...
     handles.minDistTol,handles.axes_VisualsGui,...
     handles.FileName,Undirected_Tag,...
     Directed_Tag,Save_Tag);
-handles.fig
-handle.fig.axes=findobj(handles.fig,'type','axes');
-handles.fig.axes.children=allchild(handle.fig.axes);
-guidata(hObject,handles) 
 
-whos
-closefig                 
-disp('closed fig')
-gcf
-whos
+% Current.fig=Current_fig;
+% guidata(Current_fig,Current)
+% Current.axes=findobj(Current_fig,'type','axes');
+% guidata(Current_fig,Current)
+               
+disp('Visuals Generation Complete.')
+set(handles.textBox,'string',' ')
+
 guidata(hObject,handles)
 
 
@@ -693,6 +687,7 @@ if FileName ~=0
 uiopen(FileName,1);
 handles.FileName=FileName;
 
+handles.firstRun=true;
 
 handles.nStates=numstates(seq);
 
@@ -702,8 +697,7 @@ guidata(hObject,handles)
 set(handles.s_ref, 'Max' , handles.nStates)
 set(handles.s_ref, 'SliderStep' , [1/handles.nStates, 1/handles.nStates])
 set(handles.max_ref, 'String', num2str(handles.nStates))
-handles.fig=[];
-handles.previous_fig=[];
+
 guidata(hObject,handles)
 
 
@@ -717,22 +711,34 @@ function Save_Figure_Callback(hObject, eventdata, handles)
 % hObject    handle to Save_Figure (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.refState=floor(get(handles.s_ref,'Value'));
-handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
-handles.transientLenThr=floor(get(handles.s_trans,'Value'));
-handles.maxProbTol=get(handles.s_maxProb,'Value');
-handles.insPenalty=floor(get(handles.s_ins,'Value'));
-handles.segPenalty=floor(get(handles.s_seg,'Value'));
-handles.minDistTol=floor(get(handles.s_min,'Value'));
-guidata(hObject,handles)
+P.refState=floor(get(handles.s_ref,'Value'));
+P.nSeqMax=floor(get(handles.s_nseq,'Value'));
+P.transientLenThr=floor(get(handles.s_trans,'Value'));
+P.maxProbTol=get(handles.s_maxProb,'Value');
+P.insPenalty=floor(get(handles.s_ins,'Value'));
+P.segPenalty=floor(get(handles.s_seg,'Value'));
+P.minDistTol=floor(get(handles.s_min,'Value'));
+
 
 %adjust the following Tag variables for directed graph
-Undirected_Tag=false;
-Directed_Tag =true;
-Save_Tag = true;
+P.Undirected_Tag=false;
+P.Directed_Tag =true;
+P.Save_Tag = true;
 
-Initiate_Visuals_Simpler(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
-                   Undirected_Tag,Directed_Tag,Save_Tag);
 
-                                  
+set(h,'visible','off')
+a=findobj(h,'type','axes');
+a1=allchild(a);
+
+FileName=uiputfile('*.','Insert desired filename for the figure.');
+set(h,'visible','on')
+saveas(a1,FileName(1:end-1),'fig');
+set(h,'visible','off')
+
+
+
+
+
+
+                             
 guidata(hObject,handles)
