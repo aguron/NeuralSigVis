@@ -685,27 +685,64 @@ function Save_Figure_Callback(hObject, eventdata, handles)
 % hObject    handle to Save_Figure (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.refState=floor(get(handles.s_ref,'Value'));
-handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
-handles.transientLenThr=floor(get(handles.s_trans,'Value'));
-handles.maxProbTol=get(handles.s_maxProb,'Value');
-handles.insPenalty=floor(get(handles.s_ins,'Value'));
-handles.segPenalty=floor(get(handles.s_seg,'Value'));
-handles.minDistTol=floor(get(handles.s_min,'Value'));
+refState=floor(get(handles.s_ref,'Value'));
+nSeqMax=floor(get(handles.s_nseq,'Value'));
+transientLenThr=floor(get(handles.s_trans,'Value'));
+maxProbTol=get(handles.s_maxProb,'Value');
+insPenalty=floor(get(handles.s_ins,'Value'));
+segPenalty=floor(get(handles.s_seg,'Value'));
+minDistTol=floor(get(handles.s_min,'Value'));
+
+axes_Handle=handles.axes_VisualsGui;
+
 guidata(hObject,handles)
 
 
 
-
-
-%set the following Tag variables for undirected graph
+%set the following Tag variables for undirected graph to be saved
 Undirected_Tag=true; 
 Directed_Tag=false;
-Save_Tag = true;
 
-Initiate_Visuals_Simpler(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
-                   Undirected_Tag,Directed_Tag,Save_Tag);
+if Undirected_Tag==true && Directed_Tag == false
+% Please note that the following is for the UNDIRECTED graph GUI.
 
-                                  
+graphOpts.undirected.visibility   = false;    % The figure generated should not be visible
+graphOpts.undirected.handle       = true;     % The argout (fig) is the number of the figure that you want to copy into your GUI
+graphOpts.directed.visibility     = false;
+graphOpts.directed.handle         = false;
+
+
+elseif Undirected_Tag==false && Directed_Tag==true
+ % Please note that the following is for the DIRECTED graph GUI.
+
+graphOpts.undirected.visibility   = false;    % The figure generated should not be visible
+graphOpts.undirected.handle       = false;     % The argout (fig) is the number of the figure that you want to copy into your GUI
+graphOpts.directed.visibility     = false;
+graphOpts.directed.handle         = true;
+
+end
+
+%     Figure_Saver(handles.axes_VisualsGui,2);
+%    
+%    %prompts user to input filename for saving .mat file containing selected parameters of graphics figure
+%    save_parameters('nSeqMax',nSeqMax,...                                 
+%                  'refState',refState,...                                 
+%                  'transientLenThr',transientLenThr,...                     
+%                  'maxProbTol',maxProbTol ,...                               
+%                  'insPenalty',insPenalty,...                                 
+%                  'segPenalty',segPenalty,...                               
+%                  'minDistTol',minDistTol,...
+%                  'Undirected_Tag',Undirected_Tag,...
+%                  'Directed_Tag',Directed_Tag,...
+%                  'graphOpts',graphOpts,...
+%                  'Undirected_Tag',Undirected_Tag,...
+%                  'Directed_Tag',Directed_Tag,...
+%                  'graphOpts',graphOpts);
+%                   
+% 
+axes_Handle
+h=gca
+handles.axes_data=guidata(gca)
+
 guidata(hObject,handles)
 

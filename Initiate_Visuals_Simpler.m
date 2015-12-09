@@ -53,7 +53,7 @@ if Save_Tag==true
                    'txt',cellstr(num2str(labels)),...
                    'graphOpts',graphOpts);
    
-   Figure_Saver(axes_Handle);
+   Figure_Saver(axes_Handle,'axes');
    
    %prompts user to input filename for saving .mat file containing selected parameters of graphics figure
    save_parameters('nSeqMax',nSeqMax,...                                 
@@ -89,7 +89,7 @@ end % if SaveTag==false
 
 if Save_Tag==true
  
-   Figure_Saver(axes_Handle);   
+   Figure_Saver(axes_Handle,'axes');   
 
    %prompts user to input filename for saving .mat file containing selected parameters of graphics figure
    save_parameters('nSeqMax',nSeqMax,...                                 
