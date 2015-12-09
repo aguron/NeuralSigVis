@@ -12,4 +12,4 @@ function Figure_Saver(Figure_Handle)
 h=findobj(Figure_Handle,'type','axes');
 FileName=uiputfile('*.','Insert desired filename for the figure.');
 saveas(h,FileName(1:end-1),'fig');
- 
+end

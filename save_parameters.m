@@ -22,6 +22,7 @@ P.segPenalty = segPenalty ;
 P.minDistTol = minDistTol ;
 P.Undirected_Tag = Undirected_Tag ;
 P.Directed_Tag = Directed_Tag ;
+P.graphOpts = graphOpts;
   
   
 
