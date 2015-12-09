@@ -568,11 +568,41 @@ guidata(hObject,handles)
 Undirected_Tag=false;
 Directed_Tag =true;
 Save_Tag = false;
+%saving the olf figure
 
-Initiate_Visuals_Simpler(handles.nSeqMax,handles.refState,handles.transientLenThr,handles.maxProbTol,handles.insPenalty,handles.segPenalty,handles.minDistTol,handles.axes_VisualsGui,handles.FileName,...
-                   Undirected_Tag,Directed_Tag,Save_Tag);
-                                  
+if ~(isempty(handles.previous_fig))
+figure(handles.previous_fig)
+set(handles.previous_fig,'visible','off')
+close handles.previous_fig
+end
+if ~(isempty(handles.fig))
+handles.previous_fig=handles.fig;
+figure(handles.fig);
+set(handles.fig,'visible','off')
+closehandles.fig;
+end
+
+%make sure to open and close the figure associated with handles.fig
+
+
+[handles.fig,handles.handles.axes_VisualsGui]=Initiate_Visuals_Demo(handles.nSeqMax,handles.refState,...
+    handles.transientLenThr,handles.maxProbTol,...
+    handles.insPenalty,handles.segPenalty,...
+    handles.minDistTol,handles.axes_VisualsGui,...
+    handles.FileName,Undirected_Tag,...
+    Directed_Tag,Save_Tag);
+handles.fig
+handle.fig.axes=findobj(handles.fig,'type','axes');
+handles.fig.axes.children=allchild(handle.fig.axes);
+guidata(hObject,handles) 
+
+whos
+closefig                 
+disp('closed fig')
+gcf
+whos
 guidata(hObject,handles)
+
 
 
 % --- Executes on slider movement.
@@ -672,6 +702,8 @@ guidata(hObject,handles)
 set(handles.s_ref, 'Max' , handles.nStates)
 set(handles.s_ref, 'SliderStep' , [1/handles.nStates, 1/handles.nStates])
 set(handles.max_ref, 'String', num2str(handles.nStates))
+handles.fig=[];
+handles.previous_fig=[];
 guidata(hObject,handles)
 
 
