@@ -22,7 +22,7 @@ function varargout = Undirected_VisualsGui_2(varargin)
 
 % Edit the above text to modify the response to help Undirected_VisualsGui_2
 
-% Last Modified by GUIDE v2.5 09-Dec-2015 09:59:28
+% Last Modified by GUIDE v2.5 13-Dec-2015 18:07:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -82,11 +82,12 @@ function CloseButton_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 handles.close_string= 'Gui Closed Properly';
 guidata(hObject,handles);
 fprintf('\n %s \n',handles.close_string);
 close all
-guidata(hObject,handles)
+
 
 
 
@@ -573,12 +574,27 @@ Undirected_Tag = true;
 Directed_Tag = false;
 Save_Tag = false;
 
-% if handles.firstRun==true
-% handles.firstRun=false;
-% Current=struct;
-% else
-% close Current.fig
-% end
+ref_str=strcat('refState=',num2str(handles.refState));
+set(handles.text_ref, 'String', ref_str)
+
+nSeq_str=strcat('nSeqMax=',num2str(handles.nSeqMax));
+set(handles.text_nSeq, 'String', nSeq_str)
+
+trans_str=strcat('transientLenThr=',num2str(handles.transientLenThr));
+set(handles.text_trans, 'String', trans_str)
+
+
+maxProb_str=strcat('maxProbTol=',num2str(handles.maxProbTol));
+set(handles.text_maxProb, 'String', maxProb_str)
+
+insPen_str=strcat('insPenalty=',num2str(handles.insPenalty));
+set(handles.text_insPen, 'String', insPen_str)
+
+segPen_str=strcat('segPenalty=',num2str(handles.segPenalty));
+set(handles.text_segPen, 'String', segPen_str)
+
+minDist_str=strcat('minDistTol=',num2str(handles.minDistTol));
+set(handles.text_minDist, 'String', minDist_str)
 
 [Current_fig,handles.axes_VisualsGui]=Initiate_Visuals_Demo(handles.nSeqMax,handles.refState,...
     handles.transientLenThr,handles.maxProbTol,...
@@ -594,6 +610,7 @@ Save_Tag = false;
                
 disp('Visuals Generation Complete.')
 set(handles.textBox,'string',' ')
+
 
 guidata(hObject,handles)
 
@@ -706,9 +723,9 @@ elseif FileName==0
 end
 
 
-% --- Executes on button press in Save_Figure.
-function Save_Figure_Callback(hObject, eventdata, handles)
-% hObject    handle to Save_Figure (see GCBO)
+% --- Executes on button press in Save_Graphic.
+function Save_Graphic_Callback(hObject, eventdata, handles)
+% hObject    handle to Save_Graphic (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 P.refState=floor(get(handles.s_ref,'Value'));
@@ -719,26 +736,21 @@ P.insPenalty=floor(get(handles.s_ins,'Value'));
 P.segPenalty=floor(get(handles.s_seg,'Value'));
 P.minDistTol=floor(get(handles.s_min,'Value'));
 
-
 %adjust the following Tag variables for directed graph
 P.Undirected_Tag=false;
 P.Directed_Tag =true;
 P.Save_Tag = true;
 
+%%
+fighandle=(findobj('type','figure'))' ;
+sortedhandles=sort(fighandle);
+numfigs=max(size(sortedhandles));
+%handle of the current graphics figure (hidden, but still exists)
+current_handle = sortedhandles(end-1);
 
-set(h,'visible','off')
-a=findobj(h,'type','axes');
-a1=allchild(a);
-
+%Saving Current Graphic as a figure
 FileName=uiputfile('*.','Insert desired filename for the figure.');
-set(h,'visible','on')
-saveas(a1,FileName(1:end-1),'fig');
-set(h,'visible','off')
-
-
-
-
-
-
-                             
-guidata(hObject,handles)
+figure(current_handle)
+set(current_handle,'visible','on')
+saveas(current_handle,FileName(1:end-1),'fig');
+set(current_handle,'visible','off')

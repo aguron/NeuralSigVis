@@ -86,7 +86,6 @@ handles.close_string= 'Gui Closed Properly';
 guidata(hObject,handles);
 fprintf('\n %s \n',handles.close_string);
 close all
-guidata(hObject,handles)
 
 
 
