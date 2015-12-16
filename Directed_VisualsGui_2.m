@@ -603,6 +603,17 @@ PMat=[P.refState;P.nSeqMax;...
          P.insPenalty = insPenalty;
          P.segPenalty = segPenalty;
          P.minDistTol = minDistTol; 
+%          
+%          fighandle=(findobj('type','figure'))' ;
+%          sortedhandles=sort(fighandle);
+%          numfigs=max(size(sortedhandles))-1;
+% 
+%          if numfigs >= 3
+%             for ii=1:numfigs
+%              close sortedhandles(ii)
+%              end % for ii=1:numfigs
+%          end % if numfigs >= 3
+         
      elseif isequal(PMat,tempMat)
          generate=false;
      end % if ~isequal(PMat,tempMat)
@@ -652,6 +663,8 @@ set(handles.text_minDist, 'String', minDist_str)
 disp('Graphics Generated.')
 set(handles.textBox,'string',' ')
 end % if generate
+
+
 
 
 guidata(hObject,handles)
@@ -749,15 +762,29 @@ handles.FileName=FileName;
 
 handles.firstrun=true;
 
-handles.nStates=numstates(seq);
 
-guidata(hObject,handles)
+handles.nStates=numstates(seq);
 
 %Setup nStates as max value for refState Slider
 set(handles.s_ref, 'Max' , handles.nStates)
-set(handles.s_ref, 'SliderStep' , [1/handles.nStates, 1/handles.nStates])
+set(handles.s_ref, 'Min' , 1)
+set(handles.s_ref, 'SliderStep' , [1/(handles.nStates-1), 1/(handles.nStates-1)])
 set(handles.max_ref, 'String', num2str(handles.nStates))
-
+set(handles.disp_ref, 'String', num2str(1))
+set(handles.s_ref, 'Value', 1)
+guidata(hObject,handles)
+%%
+% nSeqMax slider Setup
+minVal=1;
+nSeq= length(seq);
+for ii=1:nSeq
+maxVal=max([1,seq(ii).T]);
+end
+set(handles.s_nseq, 'Max' , maxVal)
+set(handles.s_nseq, 'min' , minVal)
+set(handles.s_nseq, 'SliderStep' , [1/(maxVal-minVal), 5/(maxVal-minVal)])
+set(handles.max_nseq, 'String', num2str(maxVal))
+set(handles.min_nseq,'string',num2str(minVal))
 guidata(hObject,handles)
 
 
