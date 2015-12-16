@@ -22,7 +22,7 @@ function varargout = Directed_VisualsGui_2(varargin)
 
 % Edit the above text to modify the response to help Directed_VisualsGui_2
 
-% Last Modified by GUIDE v2.5 02-Dec-2015 11:10:42
+% Last Modified by GUIDE v2.5 15-Dec-2015 18:57:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -82,10 +82,12 @@ function CloseButton_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 handles.close_string= 'Gui Closed Properly';
 guidata(hObject,handles);
 fprintf('\n %s \n',handles.close_string);
 close all
+
 
 
 
@@ -555,44 +557,102 @@ function Generate_Graphics_Callback(hObject, eventdata, handles)
 % hObject    handle to Generate_Graphics (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-disp('Generating Visuals...')
-set(handles.textBox,'string','Generating Visuals...')
-guidata(hObject,handles)
-handles.refState=floor(get(handles.s_ref,'Value'));
-handles.nSeqMax=floor(get(handles.s_nseq,'Value'));
-handles.transientLenThr=floor(get(handles.s_trans,'Value'));
-handles.maxProbTol=get(handles.s_maxProb,'Value');
-handles.insPenalty=floor(get(handles.s_ins,'Value'));
-handles.segPenalty=floor(get(handles.s_seg,'Value'));
-handles.minDistTol=floor(get(handles.s_min,'Value'));
-guidata(hObject,handles)
+refState=floor(get(handles.s_ref,'Value'));
+nSeqMax=floor(get(handles.s_nseq,'Value'));
+transientLenThr=floor(get(handles.s_trans,'Value'));
+maxProbTol=get(handles.s_maxProb,'Value');
+insPenalty=floor(get(handles.s_ins,'Value'));
+segPenalty=floor(get(handles.s_seg,'Value'));
+minDistTol=floor(get(handles.s_min,'Value'));
+
+tempMat=[refState;nSeqMax;...
+         transientLenThr;maxProbTol;...
+         insPenalty;segPenalty;minDistTol];
+    
+
+if handles.firstrun==true
+handles.firstrun=false;
+guidata(hObject,handles)  
+P=struct;
+P.refState=floor(get(handles.s_ref,'Value'));
+P.nSeqMax=floor(get(handles.s_nseq,'Value'));
+P.transientLenThr=floor(get(handles.s_trans,'Value'));
+P.maxProbTol=get(handles.s_maxProb,'Value');
+P.insPenalty=floor(get(handles.s_ins,'Value'));
+P.segPenalty=floor(get(handles.s_seg,'Value'));
+P.minDistTol=floor(get(handles.s_min,'Value'));
 
 %adjust the following Tag variables for directed graph
-Undirected_Tag=false;
-Directed_Tag =true;
-Save_Tag = false;
+P.Undirected_Tag=false;
+P.Directed_Tag =true;
+P.Save_Tag= false;
 
-% if handles.firstRun==true
-% handles.firstRun=false;
-% Current=struct;
-% else
-% close Current.fig
-% end
+generate=true;
 
-[Current_fig,handles.axes_VisualsGui]=Initiate_Visuals_Demo(handles.nSeqMax,handles.refState,...
-    handles.transientLenThr,handles.maxProbTol,...
-    handles.insPenalty,handles.segPenalty,...
-    handles.minDistTol,handles.axes_VisualsGui,...
-    handles.FileName,Undirected_Tag,...
-    Directed_Tag,Save_Tag);
+elseif handles.firstrun==false
+P=handles.P;
+PMat=[P.refState;P.nSeqMax;...
+         P.transientLenThr;P.maxProbTol;...
+         P.insPenalty;P.segPenalty; P.minDistTol];
+     if ~isequal(PMat,tempMat)
+         generate=true;
+         P.refState=refState;
+         P.nSeqMax=nSeqMax;
+         P.transientLenThr=transientLenThr;
+         P.maxProbTol = maxProbTol;
+         P.insPenalty = insPenalty;
+         P.segPenalty = segPenalty;
+         P.minDistTol = minDistTol; 
+     elseif isequal(PMat,tempMat)
+         generate=false;
+     end % if ~isequal(PMat,tempMat)
+end % if handles.firstrun==true
+ 
+if generate
 
-% Current.fig=Current_fig;
-% guidata(Current_fig,Current)
-% Current.axes=findobj(Current_fig,'type','axes');
-% guidata(Current_fig,Current)
-               
-disp('Visuals Generation Complete.')
+disp('Generating Graphics...')
+set(handles.textBox,'visible','off')
+set(handles.textBox,'string','Generating Graphics...')
+set(handles.textBox,'visible','on')
+guidata(hObject,handles)
+
+handles.P=P;
+guidata(hObject,handles)
+
+ref_str=strcat('refState=',num2str(P.refState));
+set(handles.text_ref, 'String', ref_str)
+
+nSeq_str=strcat('nSeqMax=',num2str(P.nSeqMax));
+set(handles.text_nSeq, 'String', nSeq_str)
+
+trans_str=strcat('transientLenThr=',num2str(P.transientLenThr));
+set(handles.text_trans, 'String', trans_str)
+
+
+maxProb_str=strcat('maxProbTol=',num2str(P.maxProbTol));
+set(handles.text_maxProb, 'String', maxProb_str)
+
+insPen_str=strcat('insPenalty=',num2str(P.insPenalty));
+set(handles.text_insPen, 'String', insPen_str)
+
+segPen_str=strcat('segPenalty=',num2str(P.segPenalty));
+set(handles.text_segPen, 'String', segPen_str)
+
+minDist_str=strcat('minDistTol=',num2str(P.minDistTol));
+set(handles.text_minDist, 'String', minDist_str)
+
+[Current_fig,handles.axes_VisualsGui]=Initiate_Visuals_Demo(P.nSeqMax,P.refState,...
+    P.transientLenThr,P.maxProbTol,...
+    P.insPenalty,P.segPenalty,...
+    P.minDistTol,handles.axes_VisualsGui,...
+    handles.FileName,P.Undirected_Tag,...
+    P.Directed_Tag,P.Save_Tag);
+
+
+disp('Graphics Generated.')
 set(handles.textBox,'string',' ')
+end % if generate
+
 
 guidata(hObject,handles)
 
@@ -680,13 +740,14 @@ function Select_File_Callback(hObject, eventdata, handles)
 % hObject    handle to Select_File (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+disp('Loading file...')
 [FileName,PathName] = uigetfile('*.mat','Select the desired MATLAB .mat file');
 
 if FileName ~=0
 uiopen(FileName,1);
 handles.FileName=FileName;
 
-handles.firstRun=true;
+handles.firstrun=true;
 
 handles.nStates=numstates(seq);
 
@@ -701,43 +762,51 @@ guidata(hObject,handles)
 
 
 elseif FileName==0
-    disp('No File Loaded')
+    disp('No file Loaded')
 end
 
 
-% --- Executes on button press in Save_Figure.
-function Save_Figure_Callback(hObject, eventdata, handles)
-% hObject    handle to Save_Figure (see GCBO)
+% --- Executes on button press in Save_Graphic.
+function Save_Graphic_Callback(hObject, eventdata, handles)
+% hObject    handle to Save_Graphic (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-P.refState=floor(get(handles.s_ref,'Value'));
-P.nSeqMax=floor(get(handles.s_nseq,'Value'));
-P.transientLenThr=floor(get(handles.s_trans,'Value'));
-P.maxProbTol=get(handles.s_maxProb,'Value');
-P.insPenalty=floor(get(handles.s_ins,'Value'));
-P.segPenalty=floor(get(handles.s_seg,'Value'));
-P.minDistTol=floor(get(handles.s_min,'Value'));
 
+P=handles.P;
 
 %adjust the following Tag variables for directed graph
 P.Undirected_Tag=false;
 P.Directed_Tag =true;
-P.Save_Tag = true;
 
 
-set(h,'visible','off')
-a=findobj(h,'type','axes');
-a1=allchild(a);
+%%
+fighandle=(findobj('type','figure'))' ;
+sortedhandles=sort(fighandle);
+numfigs=max(size(sortedhandles))-1;
+%handle of the current graphics figure (hidden, but still exists)
+current_handle = sortedhandles(end-1);
 
+%Saving Current Graphic as a figure
 FileName=uiputfile('*.','Insert desired filename for the figure.');
-set(h,'visible','on')
-saveas(a1,FileName(1:end-1),'fig');
-set(h,'visible','off')
+figure(current_handle)
+set(current_handle,'visible','on')
+saveas(current_handle,FileName(1:end-1),'fig');
+set(current_handle,'visible','off')
+
+
+save_parameters('refState',P.refState,...
+                'nSeqMax',P.nSeqMax,...
+                'transientLenThr',P.transientLenThr,...
+                'maxProbTol',P.maxProbTol,...
+                'insPenalty',P.insPenalty,...
+                'segPenalty',P.segPenalty,...
+                'minDistTol',P.minDistTol,...
+                'Undirected_Tag',false,...
+                'Directed_Tag',true)
+            
 
 
 
 
 
 
-                             
-guidata(hObject,handles)
